@@ -6,9 +6,15 @@
 (def ^:dynamic *configuration* {})
 
 (defmethod bootstrap! :configuration [what]
+  ;; load database configuration
   (let [data (slurp (str (current-dir) "/config/database.json"))
         database (json/read-str data)
         new-config (assoc-map database *configuration*)]
+    (alter-var-root #'*configuration* (constantly new-config)))
+  ;; load aws configuration
+  (let [data (slurp (str (current-dir) "/config/aws.json"))
+        aws (json/read-str data)
+        new-config (assoc-map aws *configuration*)]
     (alter-var-root #'*configuration* (constantly new-config))))
 
 (defmethod find-in-project [:configuration :redshift] [what]
@@ -17,3 +23,8 @@
    :database (:database *configuration*)
    :username (:username *configuration*)
    :password (:password *configuration*)})
+
+
+(defmethod find-in-project [:configuration :aws] [what]
+  {:access-id (:access_id *configuration*)
+   :private-key  (:private_key *configuration*)})
