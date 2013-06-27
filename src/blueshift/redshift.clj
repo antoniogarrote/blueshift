@@ -37,9 +37,25 @@
     (str "aws_access_key_id=" (:access-id aws) 
          ";aws_secret_access_key=" (:private-key aws))))
 
-(defn unload-query-to [query destination]
-  (let [unload-query-string (str "UNLOAD ('" (.replace query "'" "\\'") "') "
+(defn process-sql-options [options]
+  (reduce (fn [ac option] 
+            (condp = (keyword option)
+              :allow-overwrite  (if (:allow-overwrite options) (str ac " ALLOWOVERWRITE") ac)
+              :delimiter  (str ac " DELIMITER AS '" (:delimiter options) "'")
+              :gzip       (if (:gzip options) (str ac " GZIP") ac)
+              :add-quotes (if (:add-quotes options) (str ac " ADDQUOTES") ac)
+              :null       (str ac " NULL AS '" (:null options) "'")
+              :escape     (if (:escape options) (str ac " ESCAPE") ac)
+              :fixed-width (str ac " FIXEDWIDTH AS '" (:fixed-width options) "'")
+              ac))
+          ""
+          (keys options)))
+
+(defn unload-query-to [query destination & options]
+  (let [options (or (first options) {})
+        unload-query-string (str "UNLOAD ('" (.replace query "'" "\\'") "') "
                                  "TO '" destination "' "
-                                 "CREDENTIALS '" (credentials-string) "'")]
+                                 "CREDENTIALS '" (credentials-string) "'"
+                                  (process-sql-options options))]
     (println (str "QUERY >>" unload-query-string "<<"))
     (execute unload-query-string)))
