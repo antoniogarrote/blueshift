@@ -10,4 +10,5 @@
                  [clj-aws-s3 "0.3.3"]
                  [org.clojure/data.json "0.2.0"]
                  [postgres-redshift/postgres-redshift "8.4-703.jdbc4"]
+                 [commons-cli/commons-cli "1.2"]
                  ])

@@ -26,7 +26,7 @@
      (.close ~'*connection*)))
 
 
-(defn execute [query]
+(defn exec [query]
   (with-connection
     (let [stmt (.createStatement *connection*)]
       (.execute stmt query))))
@@ -58,4 +58,8 @@
                                  "CREDENTIALS '" (credentials-string) "'"
                                   (process-sql-options options))]
     (println (str "QUERY >>" unload-query-string "<<"))
-    (execute unload-query-string)))
+    (exec unload-query-string)))
+
+
+;; Actions
+
