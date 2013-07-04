@@ -8,6 +8,7 @@
                    [{:short-name "c" :has-arg true :required true :description "test option C" :type String} 
                     {:short-name "d" :has-arg false :required true :description "test option D" :type Integer}])]
       (is (.hasOption options "c"))
+      (is (.hasOption options "d"))
       (is (not (.hasOption options "e")))
       (let [option (.getOption options "c")]
         (is (= "c" (.getOpt option)))

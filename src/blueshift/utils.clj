@@ -21,26 +21,28 @@
          parsed (Options.)]
     (if (empty? remaining)
       parsed
-      (let [{:keys [short-name has-arg required description type]}  (first options)
+      (let [{:keys [short-name has-arg required description type]}  (first remaining)
             option (Option. (name short-name) has-arg description)]
         (.setType option type)
         (.setRequired option required)
+        (.addOption parsed option)
         (recur (rest remaining)
-               (.addOption parsed 
-                           option))))))
+               parsed)))))
 
-(defn parse-command-line-value
+(defn- parse-command-line-value
   "Tries to coerce the string witht the value of an option into the provided type."
   [value type]
   (condp = type
     Integer (Integer/parseInt value)
     Float (Float/parseFloat value)
-    String (str type)
+    String (str value)
     true value))
 
 (defn parse-command-line-args
   "Parses a vector of command line arguments using the provided options definition."
   [args cmd-line-options]
+  (println (str "ARGS " args))
+  (println (str "CMD LINE OPTIONS " cmd-line-options))
   (let [options (options-definition cmd-line-options)
         parser (PosixParser.)
         cmd-line (.parse parser options (into-array args))]
