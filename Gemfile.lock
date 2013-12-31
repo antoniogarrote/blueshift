@@ -7,6 +7,13 @@ GEM
       multi_json (~> 1.0)
       multi_xml (~> 0.5)
     builder (3.2.2)
+    columnize (0.3.6)
+    debugger (1.6.1)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.3)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.3)
     diff-lcs (1.2.5)
     jamespath (0.5.0)
     multi_json (1.8.2)
@@ -25,4 +32,5 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk-core (~> 2.0.0.rc1)
+  debugger
   rspec
